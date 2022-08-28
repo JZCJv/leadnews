@@ -1,0 +1,21 @@
+server:
+  port: 9001
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/leadnews_user?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=true
+    username: root
+    password: root
+
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.heima.model.user.pojos
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰命名
+
+#日志记录
+#logging:
+#  level:
+#    com.heima.user：debug  #测试

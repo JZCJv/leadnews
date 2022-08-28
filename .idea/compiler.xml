@@ -2,16 +2,17 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="heima-leadnews-utils" />
+        <module name="heima-leadnews-user" />
         <module name="heima-leadnews-common" />
-        <module name="heima-leadnews-service" />
         <module name="heima-leadnews-model" />
         <module name="heima-leadnews-gateway" />
         <module name="heima-leadnews-api" />
-        <module name="heima-leadnews-utils" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -21,6 +22,7 @@
       <module name="heima-leadnews-gateway" target="1.8" />
       <module name="heima-leadnews-model" target="1.8" />
       <module name="heima-leadnews-service" target="1.8" />
+      <module name="heima-leadnews-user" target="1.8" />
       <module name="heima-leadnews-utils" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -31,6 +33,7 @@
       <module name="heima-leadnews-gateway" options="-parameters" />
       <module name="heima-leadnews-model" options="-parameters" />
       <module name="heima-leadnews-service" options="-parameters" />
+      <module name="heima-leadnews-user" options="-parameters" />
       <module name="heima-leadnews-utils" options="-parameters" />
     </option>
   </component>
