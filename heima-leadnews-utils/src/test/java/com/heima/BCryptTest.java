@@ -5,26 +5,27 @@ import org.junit.Test;
 
 public class BCryptTest {
 
-    /**
-     * 加密
-     */
+
     @Test
-    public void testEncode(){
-        //产生随机盐
-        String salt = BCrypt.gensalt();
-        System.out.println(salt);
-        //加密
-        String pwd = BCrypt.hashpw("123456", salt);
-        System.out.println(pwd);
+    public void TESTMD5() {
+        ////md5加密  DegestUtils：spring框架提供的工具类
+    }
+    //加密
+    @Test
+    public void testBCrypt() {
+        String gensalt = BCrypt.gensalt();//这个是盐  29个字符，随机生成
+        System.out.println("gensalt = " + gensalt);
+        String password = BCrypt.hashpw("12345", gensalt);
+        System.out.println("password = " + password);//加密后的字符串前29位就是盐
+
+
     }
 
-    /**
-     * 验证
-     */
+    //验证
     @Test
-    public void testMatch(){
-        String pwd = "$2a$10$1ZNMO89VzYrpzw2K.cF8QeJ/smPrpFG3zkYPH7b0aueoIcr205n6q";
-        boolean flag = BCrypt.checkpw("12345", pwd);
-        System.out.println(flag);
+    public void TestPassword() {
+
+        boolean checkpw = BCrypt.checkpw("12345", "$2a$10$3soCNnP4eUbluZblatoio..10C2Umbfa.ScQCmQXO5JcCK/3Z3dmy");
+        System.out.println("checkpw = " + checkpw);
     }
 }

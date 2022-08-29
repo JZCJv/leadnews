@@ -12,6 +12,7 @@ public class Base64Utils {
      */
     public static byte[] decode(String base64){
         BASE64Decoder decoder = new BASE64Decoder();
+
         try {
             // Base64解码
             byte[] b = decoder.decodeBuffer(base64);

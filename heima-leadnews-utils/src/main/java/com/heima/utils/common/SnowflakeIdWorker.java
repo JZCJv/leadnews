@@ -1,7 +1,7 @@
 package com.heima.utils.common;
 
 /**
- * Twitter_Snowflake<br>
+ * Twitter_Snowflake<br>  雪花算法
  * SnowFlake的结构如下(每部分用-分开):<br>
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000 <br>
  * 1位标识，由于long基本类型在Java中是带符号的，最高位是符号位，正数是0，负数是1，所以id一般是正数，最高位是0<br>

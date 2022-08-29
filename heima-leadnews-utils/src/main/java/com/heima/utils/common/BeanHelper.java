@@ -1,7 +1,8 @@
 package com.heima.utils.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
+//import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 import java.util.Set;
