@@ -2,6 +2,8 @@ package com.heima.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.heima.common.dtos.AppHttpCodeEnum;
+import com.heima.common.exception.LeadNewsException;
 import com.heima.common.dtos.ResponseResult;
 import com.heima.model.user.dtos.LoginDto;
 import com.heima.model.user.pojos.ApUser;
@@ -12,7 +14,6 @@ import com.heima.utils.common.JwtUtils;
 import com.heima.utils.common.RsaUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,14 +63,15 @@ public class ApUserServiceImpl extends ServiceImpl<ApUserMapper, ApUser> impleme
             ApUser loginUser = getOne(queryWrapper);
 
             //判断用户是否存在
-            if (loginDto == null) {
-                throw new RuntimeException("用户不存在");
+            if (loginUser == null) {
+               // throw new RuntimeException("用户不存在");
+                throw new LeadNewsException(AppHttpCodeEnum.AP_USER_DATA_NOT_EXIST);
             }
 
             //判断密码是否正确 数据库密码 和 前端传过来的密码 判断
             boolean checkpw = BCrypt.checkpw(loginDto.getPassword(), loginUser.getPassword());
             if (!checkpw) {
-                throw new RuntimeException("密码错误");
+                throw new LeadNewsException(AppHttpCodeEnum.LOGIN_PASSWORD_ERROR);
             }
 
             try {

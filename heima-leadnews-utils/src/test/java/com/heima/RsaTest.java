@@ -46,13 +46,7 @@ public class RsaTest {
 
     }
 
-    /**
-     * 生成公私钥匙
-     */
-    public void Gen() throws Exception {
-        RsaUtils.generateKey(publicKeyPath,privateKeyPath,"12345",2);
 
-    }
 
 
 }

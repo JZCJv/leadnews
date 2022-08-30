@@ -15,8 +15,10 @@ public class BCryptTest {
     public void testBCrypt() {
         String gensalt = BCrypt.gensalt();//这个是盐  29个字符，随机生成
         System.out.println("gensalt = " + gensalt);
-        String password = BCrypt.hashpw("12345", gensalt);
+        String password = BCrypt.hashpw("admin", gensalt);
         System.out.println("password = " + password);//加密后的字符串前29位就是盐
+        String gensalt1 = BCrypt.gensalt();
+
 
 
     }
@@ -25,7 +27,7 @@ public class BCryptTest {
     @Test
     public void TestPassword() {
 
-        boolean checkpw = BCrypt.checkpw("12345", "$2a$10$3soCNnP4eUbluZblatoio..10C2Umbfa.ScQCmQXO5JcCK/3Z3dmy");
+        boolean checkpw = BCrypt.checkpw("admin", "$2a$10$3soCNnP4eUbluZblatoio..10C2Umbfa.ScQCmQXO5JcCK/3Z3dmy");
         System.out.println("checkpw = " + checkpw);
     }
 }
