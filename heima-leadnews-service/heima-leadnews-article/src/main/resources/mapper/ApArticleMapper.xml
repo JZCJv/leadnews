@@ -11,7 +11,7 @@
         ON aa.id=ac.article_id
         <where>
 
-            <if test="articleDto.tag=='__all__' ">
+            <if test="articleDto.tag!='__all__' ">
                 aa.channel_id=#{articleDto.tag}
 
             </if>

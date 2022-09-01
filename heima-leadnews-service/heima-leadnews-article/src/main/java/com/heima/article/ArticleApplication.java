@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @MapperScan("com.heima.article.mapper")
-public class ArticleApplicstion {
+public class ArticleApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ArticleApplicstion.class,args);
+        SpringApplication.run(ArticleApplication.class,args);
     }
 
 

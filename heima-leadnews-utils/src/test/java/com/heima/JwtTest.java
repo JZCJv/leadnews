@@ -4,7 +4,6 @@ import com.heima.utils.common.JwtUtils;
 import com.heima.utils.common.Payload;
 import com.heima.utils.common.RsaUtils;
 import org.junit.Test;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
