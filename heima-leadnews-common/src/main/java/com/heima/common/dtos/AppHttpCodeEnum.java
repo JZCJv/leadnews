@@ -21,7 +21,7 @@ public enum AppHttpCodeEnum {
     SERVER_ERROR(503,"服务器内部错误"),
     // 数据错误 1000~2000
     DATA_EXIST(1000,"数据已经存在"),
-    AP_USER_DATA_NOT_EXIST(1001,"ApUser数据不存在"),
+    AP_USER_DATA_NOT_EXIST(1001,"登陆的用户数据不存在"),
     DATA_NOT_EXIST(1002,"数据不存在"),
     // 数据错误 3000~3500
     NO_OPERATOR_AUTH(3000,"无权限操作"),

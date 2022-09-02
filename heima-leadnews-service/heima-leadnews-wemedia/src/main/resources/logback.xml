@@ -38,8 +38,8 @@
     <logger name="org.apache.ibatis.cache.decorators.LoggingCache" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="org.springframework.boot" level="info"/>
     <!--info全部日志  debug调试-->
+    <logger name="org.springframework.boot" level="debug"/>
     <root level="info">
         <!--<appender-ref ref="ASYNC"/>-->
         <appender-ref ref="FILE"/>

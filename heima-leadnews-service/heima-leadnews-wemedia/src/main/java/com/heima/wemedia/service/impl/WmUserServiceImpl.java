@@ -15,11 +15,13 @@ import com.heima.wemedia.service.WmUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.PrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 
+@Transactional
 @Service
 public class WmUserServiceImpl extends ServiceImpl<WmUserMapper, WmUser> implements WmUserService {
 
