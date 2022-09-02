@@ -53,7 +53,7 @@ public class ApArticleTest {
         QueryWrapper<ApArticleContent> queryWrapper = new QueryWrapper<>();
         //查询条件为id
         queryWrapper.eq("article_id", id);
-
+        //根据条件查询文章内容
         ApArticleContent apArticleContent = apArticleContentMapper.selectOne(queryWrapper);
 
         //判断对象和内容不为空
@@ -62,6 +62,7 @@ public class ApArticleTest {
             Template template = configuration.getTemplate("article.ftl");
 
             Map<String, Object> map = new HashMap<>();
+            //把内容转为json存储到map集合中
             List<Map> context = JsonUtils.toList(apArticleContent.getContent(), Map.class);
             map.put("context", context);
             //生成文章的静态页面
@@ -70,9 +71,7 @@ public class ApArticleTest {
 
             //上传到minio 获取url地址
             InputStream inputStream = new ByteArrayInputStream(writer.toString().getBytes());
-
             String fileName = id + ".html";
-
             String staticUrl = minIOFileStorageService.uploadHtmlFile(null, fileName, inputStream);
 
             //修改文章表的url

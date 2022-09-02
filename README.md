@@ -97,11 +97,15 @@
 # 9、演示网址
 https://pip.itcast.cn/black
 
-# 10、安装教程
+# 10、用到的技术
+Linux系统：
+1.nacos ： http://192.168.66.133:8848/nacos
+2.mysql ：
+3.minio:
+4:gateway:
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+window系统：
+1:nginx:
 
 # 11、使用说明
 
