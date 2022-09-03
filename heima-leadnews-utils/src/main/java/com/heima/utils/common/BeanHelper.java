@@ -1,8 +1,8 @@
 package com.heima.utils.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
-//import org.springframework.beans.BeanUtils;
+//import org.apache.commons.beanutils.BeanUtils; //时间为一旦空 全部数据拷贝都为空 不建议使用
+import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 import java.util.Set;

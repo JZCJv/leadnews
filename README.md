@@ -99,13 +99,13 @@ https://pip.itcast.cn/black
 
 # 10、用到的技术
 Linux系统：
-1.nacos ： http://192.168.66.133:8848/nacos
+1.nacos ： http://192.168.66.133:8848/nacos    nacos/nacos
 2.mysql ：
-3.minio:
+3.minio:  http://192.168.66.133:9000           minio/minio123
 4:gateway:
 
 window系统：
-1:nginx:
+1:nginx:   http://localhost:8801 /8802
 
 # 11、使用说明
 

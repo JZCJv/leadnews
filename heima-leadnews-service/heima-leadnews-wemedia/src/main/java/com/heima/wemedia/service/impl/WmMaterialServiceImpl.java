@@ -111,7 +111,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         //判断是否登录（获取登录用户信息）
         WmUser user = (WmUser) ThreadLocalUtils.get();
         if (user == null) {
-            throw new LeadNewsException(AppHttpCodeEnum.AP_USER_DATA_NOT_EXIST);
+            throw new LeadNewsException(AppHttpCodeEnum.NEED_LOGIN);
         }
 
         //设置查询参数
