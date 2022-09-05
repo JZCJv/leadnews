@@ -25,6 +25,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * impl wm材料服务
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Service
 @Transactional
 @Slf4j
@@ -53,8 +59,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
 
         //获取登录的用户
         WmUser wmUser = (WmUser) ThreadLocalUtils.get();
-        System.out.println("wmUser========== = " + wmUser);
-        System.out.println("userId=================="+wmUser.getId());
+
         if (wmUser == null) {
             throw new LeadNewsException(AppHttpCodeEnum.AP_USER_DATA_NOT_EXIST);
         }
@@ -71,7 +76,6 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
             String extName = originalFilename.substring(originalFilename.lastIndexOf("."));
 
             String fileName = uuid + extName;
-            System.out.println("fileName ============= " + fileName);
             String url = minIOFileStorageService.uploadImgFile(null, fileName, multipartFile.getInputStream());
 
             //存储到DB

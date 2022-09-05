@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 登录控制器
  * 自媒体登录
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
  */
 @RestController
 @Slf4j

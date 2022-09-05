@@ -6,6 +6,12 @@ import com.heima.wemedia.mapper.WmChannelMapper;
 import com.heima.wemedia.service.WmChannelService;
 import org.springframework.stereotype.Service;
 
+/**
+ * impl wm通道服务
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Service
 public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel> implements WmChannelService {
 }

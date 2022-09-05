@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * wm牌过滤器
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Component
 @WebFilter(filterName = "wmTokenFilter", urlPatterns = "/*")
 public class WmTokenFilter extends GenericFilter {

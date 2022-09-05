@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/../freemarker-demo/pom.xml" />
         <option value="$PROJECT_DIR$/../minio-demo/pom.xml" />
         <option value="$PROJECT_DIR$/../mybatis-plus-codegen/pom.xml" />
+        <option value="$PROJECT_DIR$/../aliyun-sdk-demo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * wm材料控制器
  * 自媒体素材管理
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
  */
 @Slf4j
 @RestController

@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 /**
  * 页面响应结果
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
  */
 public class PageResponseResult extends ResponseResult implements Serializable {
     private Integer currentPage; //当前页面

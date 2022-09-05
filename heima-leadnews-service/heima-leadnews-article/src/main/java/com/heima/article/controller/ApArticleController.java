@@ -3,6 +3,7 @@ package com.heima.article.controller;
 
 import com.heima.article.service.ApArticleService;
 import com.heima.common.dtos.ResponseResult;
+import com.heima.model.article.dtos.ApArticleDto;
 import com.heima.model.article.dtos.ArticleDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * App首页展示管理
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @RestController
 @RequestMapping("/api/v1/article")
 @Api(value = "App首页展示管理", tags = "leadnews-article", description = "leadnews-article")
@@ -42,12 +49,24 @@ public class ApArticleController {
     }
 
 
-    @ApiOperation("加载更多文章（下拉）的接口")
+    @ApiOperation("加载更新文章（下拉）的接口")
     @PostMapping("/loadnew")
     public ResponseResult loadnew(@RequestBody ArticleDto articleDto) {
         log.info("加载更多文章（下拉):{}", articleDto);
 
         return apArticleService.loadApArticle(articleDto, 2); //2 代表下拉（大于判断）
 
+    }
+
+
+    /**
+     * 新增App文章
+     */
+    @ApiOperation("新增App文章的接口")
+    @PostMapping("/save")
+    public ResponseResult save(@RequestBody ApArticleDto dto) {
+        log.info("新增App文章");
+
+        return  apArticleService.saveArticle(dto);
     }
 }

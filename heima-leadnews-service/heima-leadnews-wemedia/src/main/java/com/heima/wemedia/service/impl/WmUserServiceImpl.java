@@ -21,6 +21,12 @@ import java.security.PrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * impl wm用户服务
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Transactional
 @Service
 public class WmUserServiceImpl extends ServiceImpl<WmUserMapper, WmUser> implements WmUserService {

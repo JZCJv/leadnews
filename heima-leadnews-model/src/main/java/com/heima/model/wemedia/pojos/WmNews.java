@@ -116,8 +116,17 @@ public class WmNews implements Serializable {
 
     @TableField("enable")
     private Short enable;
-    
-     //状态枚举类
+
+    /**
+     *  0 草稿
+     *  1 提交（待审核）
+     *  2 审核失败
+     *  3 人工审核
+     *  4 人工审核通过
+     *  8 审核通过（待发布）
+     *  9 已发布
+     */
+    //状态枚举类
     @Alias("WmNewsStatus")
     public enum Status{
         NORMAL((short)0),SUBMIT((short)1),FAIL((short)2),ADMIN_AUTH((short)3),ADMIN_SUCCESS((short)4),SUCCESS((short)8),PUBLISHED((short)9);

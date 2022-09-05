@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * wm通道控制器
  * 查询所有频道
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
  */
 @RestController
 @RequestMapping("/api/v1/channel")

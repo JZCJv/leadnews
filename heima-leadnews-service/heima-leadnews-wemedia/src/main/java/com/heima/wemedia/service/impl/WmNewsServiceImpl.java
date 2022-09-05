@@ -20,7 +20,9 @@ import com.heima.utils.common.ThreadLocalUtils;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
+import com.heima.wemedia.service.WmNewsAutoScanService;
 import com.heima.wemedia.service.WmNewsService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +35,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * impl wm新闻服务
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Transactional
 @Service
+@Slf4j
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
 
 
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
 
-
-
     @Autowired
     private WmMaterialMapper wmMaterialMapper;
+
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
 
     /**
      * 查询自媒体文章列表
@@ -189,6 +199,25 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         }
 
 
+        //在文章发布成功后调用审核的方法  待审核的状态为1
+        if (dto.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
+
+            try {
+                wmNewsAutoScanService.autoScanWmNews(wmNews);
+
+            } catch (Exception e) {
+                log.info("审核失败，原因是：{}",e.getMessage());
+                throw  new LeadNewsException( AppHttpCodeEnum.SERVER_ERROR);//服务器异常
+            }
+
+        }
+
+
+
+
+
+
+
         //3、绑定文章和内容素材、封面素材的关系
 
         //内容素材与文章的关系绑定
@@ -214,6 +243,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             wmNewsMaterialMapper.saveNewMaterialIds(materialIds, wmNews.getId(), 1);
 
         }
+
 
 
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);

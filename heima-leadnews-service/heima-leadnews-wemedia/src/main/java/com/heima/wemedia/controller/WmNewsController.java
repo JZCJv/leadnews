@@ -11,6 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * wm新闻控制器
+ *
+ * @author CAIJIAZHEN
+ * @date 2022/09/04
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/news")
