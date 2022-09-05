@@ -3,26 +3,32 @@ package com.heima.wemedia.service.impl;
 import com.heima.article.feign.ApArticleFeign;
 import com.heima.common.aliyun.GreenImageScan;
 import com.heima.common.aliyun.GreenTextScan;
+import com.heima.common.constants.RedisConstant;
 import com.heima.common.dtos.ResponseResult;
 import com.heima.common.minio.MinIOFileStorageService;
 import com.heima.model.article.dtos.ApArticleDto;
 import com.heima.model.wemedia.pojos.WmChannel;
 import com.heima.model.wemedia.pojos.WmNews;
+import com.heima.model.wemedia.pojos.WmSensitive;
 import com.heima.model.wemedia.pojos.WmUser;
 import com.heima.utils.common.BeanHelper;
 import com.heima.utils.common.JsonUtils;
+import com.heima.utils.common.SensitiveWordUtil;
 import com.heima.wemedia.mapper.WmChannelMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
+import com.heima.wemedia.mapper.WmSensitiveMapper;
 import com.heima.wemedia.mapper.WmUserMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -57,6 +63,12 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private ApArticleFeign apArticleFeign;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private WmSensitiveMapper wmSensitiveMapper;
+
 
     /**
      * 自动扫描wm新闻
@@ -80,6 +92,16 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             List<String> textList = getTextFromWmNews(wmNews);
             //提取文章中的图片
             ArrayList<byte[]> imageList = getImageFromWmNews(wmNews);
+
+
+            //自定义敏感词
+            if (CollectionUtils.isNotEmpty(textList)) {
+
+                boolean flag = handleSensitiveScan(textList, wmNews);
+                if (!flag) {
+                    return;  //如果审核失败则退出
+                }
+            }
 
 
             //提交给阿里云内容接口检测，根据结果修改文章
@@ -151,6 +173,69 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
 
     /**
+     * 自定义敏感词
+     *
+     * @param textList 文本列表
+     * @param wmNews   wm新闻
+     * @return boolean
+     */
+    private boolean handleSensitiveScan(List<String> textList, WmNews wmNews) {
+
+        boolean flag = true;
+
+        List<String> wordList = null;
+
+        //从redis查询数据
+        String redisData = redisTemplate.opsForValue().get(RedisConstant.SENSITIVE_WORD);
+        if (StringUtils.isEmpty(redisData)) {
+
+            //从数据库查询所有敏感词
+            List<WmSensitive> wmSensitiveList = wmSensitiveMapper.selectList(null);
+
+            if (CollectionUtils.isNotEmpty(wmSensitiveList)) {
+
+                wordList = wmSensitiveList.stream().map(WmSensitive::getSensitives).collect(Collectors.toList());
+
+
+                //把敏感词存入redis
+                redisTemplate.opsForValue().set(RedisConstant.SENSITIVE_WORD, JsonUtils.toString(wordList));
+
+
+            }
+
+        }  else {
+
+                //转换格式
+                wordList = JsonUtils.toList(redisData, String.class);
+
+            }
+
+                //构建敏感词词库
+                SensitiveWordUtil.initMap(wordList);
+
+                if (CollectionUtils.isNotEmpty(textList)) {
+                    String collect = textList.stream().collect(Collectors.joining(""));
+
+                    //匹配敏感词库
+                    Map<String, Integer> result = SensitiveWordUtil.matchWords(collect);
+                    if (result != null && result.size() > 0) {
+
+                        //获取违规词
+                        Set<String> keys = result.keySet();
+
+                        //修改文章状态
+                        wmNews.setStatus(WmNews.Status.FAIL.getCode());
+                        wmNews.setReason("文章存在违规词" + keys);
+                        wmNewsMapper.updateById(wmNews);
+                        flag = false;
+                    }
+                }
+
+        return flag;
+    }
+
+
+    /**
      * 发表文章
      *
      * @param wmNews wm新闻
@@ -167,7 +252,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         WmUser wmUser = wmUserMapper.selectById(wmNews.getUserId());
         if (wmUser != null) {
 
-            articleDto.setAuthorId(Long.valueOf(wmNews.getId()));
+            articleDto.setAuthorId(Long.valueOf(wmUser.getId()));
             articleDto.setAuthorName(wmUser.getNickname());
         }
 
