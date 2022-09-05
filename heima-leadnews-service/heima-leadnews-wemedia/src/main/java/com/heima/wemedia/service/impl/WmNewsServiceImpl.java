@@ -29,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -186,7 +183,9 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
         if (dto.getId() == null) {
             //新增
+            wmNews.setCreatedTime(new Date());
             save(wmNews);
+
 
         } else {
             //修改
@@ -199,18 +198,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         }
 
 
-        //在文章发布成功后调用审核的方法  待审核的状态为1
-        if (dto.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
 
-            try {
-                wmNewsAutoScanService.autoScanWmNews(wmNews);
-
-            } catch (Exception e) {
-                log.info("审核失败，原因是：{}",e.getMessage());
-                throw  new LeadNewsException( AppHttpCodeEnum.SERVER_ERROR);//服务器异常
-            }
-
-        }
 
 
 
@@ -244,7 +232,19 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
         }
 
+        //在文章发布成功后调用审核的方法  待审核的状态为1
+        if (dto.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
 
+            try {
+                wmNews.setSubmitedTime(new Date());//提交发布时间
+                wmNewsAutoScanService.autoScanWmNews(wmNews);
+
+            } catch (Exception e) {
+                log.info("审核失败，原因是：{}",e.getMessage());
+                throw  new LeadNewsException( AppHttpCodeEnum.SERVER_ERROR);//服务器异常
+            }
+
+        }
 
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
