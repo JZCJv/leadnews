@@ -19,7 +19,10 @@ import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmSensitiveMapper;
 import com.heima.wemedia.mapper.WmUserMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import net.sourceforge.tess4j.ITesseract;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -69,12 +79,16 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private WmSensitiveMapper wmSensitiveMapper;
 
+    @Autowired
+    private ITesseract tesseract; //图片文字识别
+
 
     /**
      * 自动扫描wm新闻
      *
      * @param wmNews wm新闻
      */
+    @GlobalTransactional
     @Async //标明当前方法是一个异步方法
     public void autoScanWmNews(WmNews wmNews) {
 
@@ -88,10 +102,12 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         //判断状态是否为待审核状态
         if (wmNews.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
 
-            //提取文章中的文字
-            List<String> textList = getTextFromWmNews(wmNews);
+
             //提取文章中的图片
             ArrayList<byte[]> imageList = getImageFromWmNews(wmNews);
+
+            //提取文章中的文字
+            List<String> textList = getTextFromWmNews(wmNews,imageList);
 
 
             //自定义敏感词
@@ -277,6 +293,10 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
         ResponseResult<Long> responseResult = apArticleFeign.save(articleDto);
 
+
+        //TODO  模拟Seata分布式异常
+       // int a= 9/0;
+
         if (responseResult.getCode().equals(200)) {
 
             Long articleID = responseResult.getData();
@@ -342,7 +362,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
      * @param wmNews
      * @return
      */
-    private List<String> getTextFromWmNews(WmNews wmNews) {
+    private List<String> getTextFromWmNews(WmNews wmNews,List<byte[]> imageList) {
 
         //存储文字
         List<String> textList = new ArrayList<>();
@@ -368,8 +388,28 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
                 }
             });
 
-
         }
+
+        //识别所有图片，提取文字
+        if (CollectionUtils.isNotEmpty(imageList)) {
+
+            for (byte[] image : imageList) {
+
+                try {
+                    InputStream inputStream = new ByteArrayInputStream(image);
+                    BufferedImage bufferedImage = ImageIO.read(inputStream);
+                    String result = tesseract.doOCR(bufferedImage);
+                    if (StringUtils.isNotEmpty(result)) {
+                        textList.add(result);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.error("ORC识别失败：{}",e.getMessage());
+                }
+            }
+        }
+
         return textList;
     }
 

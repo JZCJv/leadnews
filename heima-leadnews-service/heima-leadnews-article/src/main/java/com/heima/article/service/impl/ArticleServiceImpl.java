@@ -6,6 +6,7 @@ import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
+import com.heima.article.service.ArticleFreemarkerService;
 import com.heima.common.dtos.ResponseResult;
 import com.heima.model.article.dtos.ApArticleDto;
 import com.heima.model.article.dtos.ArticleDto;
@@ -39,6 +40,9 @@ public class ArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle> 
 
     @Autowired
     private ApArticleContentMapper apArticleContentMapper;
+
+    @Autowired
+    private ArticleFreemarkerService articleFreemarkerService;
 
     /**
      * 加载首页文章
@@ -106,6 +110,10 @@ public class ArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle> 
 
 
         }
+
+        //生成静态页面
+        articleFreemarkerService.buildArticleToMinIO(apArticle, dto.getContent());
+
 
         //返回文章ID
         return ResponseResult.okResult(apArticle.getId());

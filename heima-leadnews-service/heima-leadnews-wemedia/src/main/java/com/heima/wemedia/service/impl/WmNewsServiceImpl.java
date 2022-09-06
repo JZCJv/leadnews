@@ -199,13 +199,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
 
 
-
-
-
-
-
-
-
         //3、绑定文章和内容素材、封面素材的关系
 
         //内容素材与文章的关系绑定
@@ -231,6 +224,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             wmNewsMaterialMapper.saveNewMaterialIds(materialIds, wmNews.getId(), 1);
 
         }
+
+
 
         //在文章发布成功后调用审核的方法  待审核的状态为1
         if (dto.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
