@@ -3,7 +3,7 @@ package com.heima.wemedia.service.impl;
 import com.heima.article.feign.ApArticleFeign;
 import com.heima.common.aliyun.GreenImageScan;
 import com.heima.common.aliyun.GreenTextScan;
-import com.heima.common.constants.RedisConstant;
+import com.heima.common.constants.RedisConstants;
 import com.heima.common.dtos.ResponseResult;
 import com.heima.common.minio.MinIOFileStorageService;
 import com.heima.model.article.dtos.ApArticleDto;
@@ -19,7 +19,6 @@ import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmSensitiveMapper;
 import com.heima.wemedia.mapper.WmUserMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.ITesseract;
@@ -31,13 +30,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -202,7 +198,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         List<String> wordList = null;
 
         //从redis查询数据
-        String redisData = redisTemplate.opsForValue().get(RedisConstant.SENSITIVE_WORD);
+        String redisData = redisTemplate.opsForValue().get(RedisConstants.SENSITIVE_WORD);
         if (StringUtils.isEmpty(redisData)) {
 
             //从数据库查询所有敏感词
@@ -214,7 +210,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
 
                 //把敏感词存入redis
-                redisTemplate.opsForValue().set(RedisConstant.SENSITIVE_WORD, JsonUtils.toString(wordList));
+                redisTemplate.opsForValue().set(RedisConstants.SENSITIVE_WORD, JsonUtils.toString(wordList));
 
 
             }
